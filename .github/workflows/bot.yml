@@ -1,0 +1,53 @@
+name: Trading bots
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # ik pēc 10 min
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "test = tikai pārbaude, trade = tirgot"
+        type: choice
+        options: [test, trade]
+        default: test
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trading-bot
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install websockets requests
+      - run: python trading_bot.py
+        env:
+          CTRADER_CLIENT_ID: ${{ secrets.CTRADER_CLIENT_ID }}
+          CTRADER_CLIENT_SECRET: ${{ secrets.CTRADER_CLIENT_SECRET }}
+          CTRADER_ACCESS_TOKEN: ${{ secrets.CTRADER_ACCESS_TOKEN }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          MODE: ${{ inputs.mode || 'trade' }}
+          ACCOUNT_LOGIN: ${{ vars.ACCOUNT_LOGIN }}
+          TP_EUR: ${{ vars.TP_EUR }}
+          SL_EUR: ${{ vars.SL_EUR }}
+          KILL_EUR: ${{ vars.KILL_EUR }}
+          VIRTUAL_BALANCE: ${{ vars.VIRTUAL_BALANCE }}
+      - name: Saglabā stāvokli
+        if: always()
+        run: |
+          if [ -n "$(git status --porcelain bot_state.json)" ]; then
+            git config user.name "mans-bots"
+            git config user.email "mans-bots@users.noreply.github.com"
+            git add bot_state.json
+            git commit -m "bot state"
+            git pull --rebase
+            git push
+          fi
