@@ -2,7 +2,7 @@ name: Trading bots
 
 on:
   schedule:
-    - cron: "*/10 * * * *"   # ik pēc 10 min
+    - cron: "*/5 * * * *"   # ik pēc 5 min (GitHub minimums)
   workflow_dispatch:
     inputs:
       mode:
@@ -22,12 +22,12 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - run: pip install websockets requests
-      - run: python trading_bot.py
+      - run: python trading_bot_v2.py
         env:
           CTRADER_CLIENT_ID: ${{ secrets.CTRADER_CLIENT_ID }}
           CTRADER_CLIENT_SECRET: ${{ secrets.CTRADER_CLIENT_SECRET }}
@@ -40,6 +40,7 @@ jobs:
           SL_EUR: ${{ vars.SL_EUR }}
           KILL_EUR: ${{ vars.KILL_EUR }}
           VIRTUAL_BALANCE: ${{ vars.VIRTUAL_BALANCE }}
+          MIN_SCORE: ${{ vars.MIN_SCORE }}
       - name: Saglabā stāvokli
         if: always()
         run: |
