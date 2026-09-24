@@ -1,11 +1,16 @@
 {
   "start_balance": 200.0,
-  "last_balance": 202.02,
+  "last_balance": 201.66,
   "stats": {
     "vecais bots": {
       "n": 1,
       "wins": 1,
       "pnl": 2.02
+    },
+    "bos-fvg+trend": {
+      "n": 1,
+      "wins": 0,
+      "pnl": -0.36
     }
   },
   "open_tag": "bos-fvg+trend"
