@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install websockets requests
-      - run: python trading_bot_v3.py
+      - run: python trading_bot_v4.py
         env:
           CTRADER_CLIENT_ID: ${{ secrets.CTRADER_CLIENT_ID }}
           CTRADER_CLIENT_SECRET: ${{ secrets.CTRADER_CLIENT_SECRET }}
