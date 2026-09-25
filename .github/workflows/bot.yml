@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install websockets requests
-      - run: python trading_bot_v4.py
+      - run: trading_bot_v5.py
         env:
           CTRADER_CLIENT_ID: ${{ secrets.CTRADER_CLIENT_ID }}
           CTRADER_CLIENT_SECRET: ${{ secrets.CTRADER_CLIENT_SECRET }}
@@ -41,6 +41,7 @@ jobs:
           KILL_EUR: ${{ vars.KILL_EUR }}
           VIRTUAL_BALANCE: ${{ vars.VIRTUAL_BALANCE }}
           MIN_SCORE: ${{ vars.MIN_SCORE }}
+          MAX_HOLD_MIN: ${{ vars.MAX_HOLD_MIN }}
       - name: Saglabā stāvokli
         if: always()
         run: |
