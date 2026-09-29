@@ -1,36 +1,5 @@
 {
-  "start_balance": 200.0,
+  "start_balance": 196.75,
   "last_balance": 196.75,
-  "stats": {
-    "vecais bots": {
-      "n": 1,
-      "wins": 1,
-      "pnl": 2.02
-    },
-    "bos-fvg+trend": {
-      "n": 16,
-      "wins": 5,
-      "pnl": -10.17
-    },
-    "meanrev+trend": {
-      "n": 1,
-      "wins": 1,
-      "pnl": 2.0
-    },
-    "trend": {
-      "n": 8,
-      "wins": 4,
-      "pnl": 3.16
-    },
-    "bos-fvg+meanrev+trend": {
-      "n": 1,
-      "wins": 1,
-      "pnl": 0.44
-    },
-    "breakout+trend": {
-      "n": 1,
-      "wins": 0,
-      "pnl": -0.7
-    }
-  }
+  "stats": {}
 }
