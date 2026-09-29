@@ -30,6 +30,7 @@ SL_EUR = float(os.environ.get("SL_EUR") or 3)
 KILL_EUR = float(os.environ.get("KILL_EUR") or 25)
 MIN_SCORE = float(os.environ.get("MIN_SCORE") or 0.15)
 MARGIN_USE = 0.8
+MAX_POSITIONS = int(os.environ.get("MAX_POSITIONS") or 3)
 MAX_TP_ATR = float(os.environ.get("MAX_TP_ATR") or 5)   # ātruma filtrs
 MAX_HOLD_MIN = float(os.environ.get("MAX_HOLD_MIN") or 120)  # max darījuma ilgums minūtēs
 # Indeksi tikai savā galvenajā sesijā (vietējais laiks)
@@ -460,6 +461,9 @@ async def run():
 
         rec = await c.request(RECONCILE_REQ, {"ctidTraderAccountId": aid}, RECONCILE_RES)
         bot_pos = [p for p in rec.get("position", []) if is_bot(p)]
+        if len(bot_pos) >= MAX_POSITIONS and MODE not in ("test",):
+            print(f"Jau ir {len(bot_pos)}/{MAX_POSITIONS} atvērtas pozīcijas, gaidu TP/SL.")
+            return
 
         # --- Virtuālais konts + statistika ---
         if "start_balance" not in state:
@@ -608,7 +612,8 @@ async def run():
             md = int(m.get("moneyDigits", money_digits))
             mm = (m.get("margin") or [{}])[0]
             margin_min = max(mm.get("buyMargin", 0), mm.get("sellMargin", 0)) / 10 ** md
-            budget = virtual * MARGIN_USE
+            free_slots = max(1, MAX_POSITIONS - len(bot_pos))
+            budget = (virtual * MARGIN_USE) / free_slots
             if margin_min <= 0 or margin_min > budget:
                 skipped.append(f"{s['label']}: par dārgu (min marža {margin_min:.0f}€)")
                 continue
