@@ -461,9 +461,6 @@ async def run():
 
         rec = await c.request(RECONCILE_REQ, {"ctidTraderAccountId": aid}, RECONCILE_RES)
         bot_pos = [p for p in rec.get("position", []) if is_bot(p)]
-        if len(bot_pos) >= MAX_POSITIONS and MODE not in ("test",):
-            print(f"Jau ir {len(bot_pos)}/{MAX_POSITIONS} atvērtas pozīcijas, gaidu TP/SL.")
-            return
 
         # --- Virtuālais konts + statistika ---
         if "start_balance" not in state:
@@ -509,10 +506,11 @@ async def run():
                            f"(ne TP, ne SL). Nākamā palaišana meklēs jaunu darījumu.")
                 else:
                     still.append(p)
-            if still:
-                print(f"Jau ir atvērta bota pozīcija ({len(still)}), gaidu TP/SL.")
-            save_state(state)
-            return
+            bot_pos = still
+            if len(bot_pos) >= MAX_POSITIONS:
+                print(f"Jau ir {len(bot_pos)}/{MAX_POSITIONS} atvērtas pozīcijas, gaidu TP/SL.")
+                save_state(state)
+                return
 
         # --- Simboli ---
         syms = await c.request(SYMBOLS_LIST_REQ, {"ctidTraderAccountId": aid},
