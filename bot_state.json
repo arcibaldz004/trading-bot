@@ -1,11 +1,11 @@
 {
   "start_balance": 196.75,
-  "last_balance": 173.98,
+  "last_balance": 174.99,
   "stats": {
     "bos-fvg+trend": {
-      "n": 16,
-      "wins": 8,
-      "pnl": -17.65
+      "n": 17,
+      "wins": 9,
+      "pnl": -16.64
     },
     "trend": {
       "n": 5,
@@ -17,6 +17,5 @@
       "wins": 0,
       "pnl": -2.79
     }
-  },
-  "open_tag": "bos-fvg+trend"
+  }
 }
